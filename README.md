@@ -1,5 +1,5 @@
 # Records_holder_simulation
-One of my first C programs in 2013.
+One of my first C programs, built in 2013.
 
 It's a simple program that holds records in a particular format
 
