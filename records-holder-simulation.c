@@ -9,8 +9,7 @@
 
 /*
 
-example for new record: newCitizen Christos, Tryfonopoulos, 27/06/1978, 271-1102030, trifon@uop.gr, 147.27.32.15:9535, birthCert, 79927-39871-3
-
+example for new record: newCitizen Manwlis, Antwnopoulos, 27/06/1978, 271-1102030, manwlis@uop.com, 147.27.32.15:9535, birthCert, 79927-39871-3
 */
 
 typedef struct{
@@ -57,17 +56,17 @@ struct ctzn *tail;
 int main(int argc, char *argv[]){
 	  head = tail = NULL;
     srand(time(NULL));
-    printf("Efarmogi e3upiretisis pelatwn e-government kolokotrwnitsiou.\n");
+    printf("Records holder simulation.\n");
     printf("Welcome.\n");
     do{
-      printf("Parakalw dwste entoli:\n");
+      printf("Please give an operation to be executed:\n");
       dwseEntoli();
     }while(strcmp(subString1a,"exit")!=0);
-    printf("Kalh sunexeia kai prosoxi stin PAPADIA(milaei polu)!\n");
+    printf("Program exiting!\n");
     free_q();
 }
 
-//sunartisi pou elegxei ton arithmo sunallagis
+//function for checking the transaction code
 char *neos_arithmos_sinallagis(){
 	char *s = strdup("xXxXx-XxXxX-q");
 	int sum = 0, k;
@@ -94,7 +93,7 @@ char *neos_arithmos_sinallagis(){
 	return s;
 }
 
-//sunartisi gia ton elegxo egkurotitas twn stoixeiwn pou eisagoume
+//function for checking if all input is valid
 int checks(){
 	int j, k, pavla, digits, papaki, teleies, sum;
 	char a[60] = {0};
@@ -114,7 +113,7 @@ int checks(){
 
 	/* date */
 	if (strlen(subString[2]) != 10){
-		printf("Lathos mikos imerominias (%s)\n",subString[2]);
+		printf("Wrong length of date (%s)\n",subString[2]);
 		return 0;
 	}
 	//printf("imerominia (%s)\n",subString[2]);
@@ -123,31 +122,31 @@ int checks(){
 		!isdigit(subString[2][6]) || !isdigit(subString[2][7]) ||
 		!isdigit(subString[2][8]) || !isdigit(subString[2][9]) )
 	{
-		printf("Lathos morfi imerominias\n");
+		printf("Wrong format of date\n");
 		return 0;
 	}
 
 	i = atoi(subString[2]);
 	if (i < 1 || i > 31){
-		printf("Lathos mera\n");
+		printf("Wrong day\n");
 		return 0;
 	}
 
 	i = atoi(subString[2] + 3);
 	if (i < 1 || i > 12){
-		printf("Lathos minas\n");
+		printf("Wrong month\n");
 		return 0;
 	}
 
 	i = atoi(subString[2] + 6);
 	if (i < 1900 || i > 1995){
-		printf("Lathos etos\n");
+		printf("Wrong year\n");
 		return 0;
 	}
 
 	/* tel */
 	if (strlen(subString[3]) != 11){
-		printf("Lathos mikos tilefonou\n");
+		printf("Wrong length of phone number.\n");
 		return 0;
 	}
 
@@ -156,18 +155,18 @@ int checks(){
 		if (subString[3][i] == '-'){
 			pavla++;
 			if (i != 3 && i != 4){
-				printf("Lathos thesi pavlas sto tilefono\n");
+				printf("You have inserted '-' in a wrong position of the cellphone number.\n");
 				return 0;
 			}
 		}
 		else if (!isdigit(subString[3][i])){
-			printf("Lathos xaraktiras %c sto tilefono\n", subString[3][i]);
+			printf("Wrong character %c on the cellphone number.\n", subString[3][i]);
 			return 0;
 		}
 		else digits++;
 	}
 	if (digits != 10 || pavla != 1){
-		printf("Lathos morfi tilefonou\n");
+		printf("Wrong format of cellphone number.\n");
 		return 0;
 	}
 
@@ -179,22 +178,22 @@ int checks(){
 		else if (subString[4][i] == '.') teleies++;
 		else if (isalnum(subString[4][i])) digits++;
 		else {
-			printf("Lathos xaraktiras %c sto email\n", subString[4][i]);
+			printf("Wrong character %c on email input.\n", subString[4][i]);
 			return 0;
 		}
 	}
 	i = strlen(subString[4]);
 
 	if (isdigit(subString[4][0])){
-		printf("O protos xaraktiras sto email den borei na einai psifio\n");
+		printf("First character on an email cant be a digit.\n");
 		return 0;
 	}
 	else if (papaki != 1 || teleies == 0 || digits < 4){
-		printf("Lathos morfi email\n");
+		printf("Wrong format of email.\n");
 		return 0;
 	}
 	else if (!isalpha(subString[4][i-1]) || !isalpha(subString[4][i-2]) || subString[4][i-3] != '.'){
-		printf("Lathos kataliksi email\n");
+		printf("Wrong postfix of email.\n");
 		return 0;
 	}
 
@@ -205,24 +204,24 @@ int checks(){
 		else if (subString[5][i] == ':') {
 			k++;
 			if (teleies != 3){
-				printf("Lathos morfi ip (sindiasmos '.' kai ':'\n");
+				printf("Wrong format of ip (please use acombination of '.' and ':'\n");
 				return 0;
 			}
 		}
 		else if (!isdigit(subString[5][i])) {
 
-			printf("Lathos xaraktiras %c sto ip\n", subString[5][i]);
+			printf("Wrong character %c on ip input.\n", subString[5][i]);
 			return 0;
 		}
 		else digits++;
 	}
 
 	if (teleies != 3){
-		printf("Lathos plithos pedion sto ip\n");
+		printf("Wrong number of inputs in ip field.\n");
 		return 0;
 	}
 	if (k != 1){
-		printf("Lathos plithos pedion sto ip (epitrepetai mia fora to ':')\n");
+		printf("Wrong number of inputs in ip field (':' is required only once)\n");
 		return 0;
 	}
 	strcpy(a, subString[5]);
@@ -231,14 +230,14 @@ int checks(){
 	for (j = 0 ; j < 4 ; j++){
 		i = atoi(token);
 		if ( i < 0 || i > 256){
-			printf("Lathos timi ip %d\n", i);
+			printf("Wrong ip value %d\n", i);
 			return 0;
 		}
 		token = strtok(NULL, ".:");
 	}
 
 	if ( i < 0 || i > 65535){
-			printf("Lathos timi port %d\n", i);
+			printf("Wrong port value %d\n", i);
 			return 0;
 	}
 
@@ -248,11 +247,11 @@ int checks(){
 		strcmp(subString[6], "debtCert") != 0 &&
 		strcmp(subString[6], "residenceCert") != 0 &&
 		strcmp(subString[6], "electionCert") != 0 ){
-			printf("To pistopoiitiko einai lathos\n");
+			printf("Certification is wrong.\n");
 			return 0;
 		}
 
-	/* arithmos sunallagis */
+	/* transaction code */
 	if (strlen(subString[7]) != 13){
 		//printf("(%s) %d\n", subString[7], strlen(subString[7]));
 		subString[7] = neos_arithmos_sinallagis();
@@ -289,7 +288,7 @@ int checks(){
 	return 1;
 }
 
-//apodesmefsi mnimis gia tin ouritsa mas me tin entoli exit
+//free momey of the queue we used
 void free_q(){
 	citizen* q;
 	while (head != NULL){
@@ -299,16 +298,17 @@ void free_q(){
 	}
 }
 
+//function for saving a file of the records
 void backup(){
 	char* filename = strtok(NULL, "\n");
 	FILE *f = NULL;
 	citizen* temp = head;
 	if (head == NULL){
-		printf("Adeia oura!\n");
+		printf("Empty queue!\n");
 		return;
 	}
 	if (filename == NULL){
-		printf("Prepei na dosete onoma arxeiou!\n");
+		printf("You have to give a file name!\n");
 		return;
 	}
 
@@ -325,10 +325,10 @@ void backup(){
   		temp = temp->next;
 	}
 	fclose(f);
-	printf("ta dedomena apothikeftikan sto arxeio %s\n", filename);
+	printf("Data succesfully saved on file %s !\n", filename);
 }
 
-
+//function for obtaining records from a file
 void restore(){
 	char delimit[]=" ,\n";
 	FILE *f = fopen(subString1a, "r");
@@ -349,7 +349,7 @@ void restore(){
 
 	fclose(f);
 }
-// sunarthsh pou elegxei poia entoli ehei eisagei o xristis kai gemizei tin oura mas
+// function that checks which operation the user has demanded and feels in the queue with the inserted data
 void dwseEntoli(){
     char delimit[]=" ,\n";
       if(fgets(entoli, sizeof entoli, stdin)){
@@ -366,18 +366,18 @@ void dwseEntoli(){
         if (checks() == 0) return;
         enQueue(subString);
       }else if(strcmp(subString1a,"serveCitizen")==0){
-        printf("Dwsate tin entoli eksuphretisis tou prwtou politi.\n");
+        printf("You have chosen to server the first customer.\n");
         Dequeue();
         x=2;
         return;
       }else if(strcmp(subString1a,"removeCitizen")==0){
-        printf("Dwsate tin entoli apoxwrisis politi apo tin oura.\n");
+        printf("You have chosen for a citizen to leave the queue.\n");
         x=3;
         return;
       }else if(strcmp(subString1a,"print")==0){
         printQueue();
       }else if(strcmp(subString1a,"printRev")==0){
-        printf("Dwsate tin entoli ektupwsis tis ouras anamonis anapoda!.\n");
+        printf("You have chosen for the queue to be printed backwards!\n");
         subString1a = strtok(NULL, " \n");
         reverse(head);
         return;
@@ -388,7 +388,7 @@ void dwseEntoli(){
       else if(strcmp(subString1a,"restore")==0){
         subString1a = strtok(NULL," \n");
         if (subString1a == NULL){
-        	printf("Prepei na dosete onoma arxeiou\n");
+        	printf("You have to give a file name!\n");
         	return;
         }
         if (head != NULL){
@@ -434,12 +434,12 @@ void dwseEntoli(){
   	tail = temp;
   }
 
-//sunartisi emfanisis tis ouras
+//function to print the queue
 void printQueue(){
   citizen* temp = head;
   char *mode = strtok(NULL, " \n");
   if (mode == NULL){
-  	printf("Prepei na dosete '*' h' pistopoihtiko\n");
+  	printf("You have to type '*' or a give a certificate number.\n");
   	return;
   }
 	while(temp != NULL) {
@@ -454,11 +454,11 @@ void printQueue(){
 }
 
 
-//sunartisi gia na vgazei ton prwto politi pou perimenei stin oura
+//function to dequeue the first cell
 void Dequeue() {
 	citizen* temp = head;
 	if(head == NULL) {
-		printf("H oura einai adeia.\n");
+		printf("Queue is empty.\n");
 		return;
 	}
 	if(head == tail) {
@@ -470,7 +470,7 @@ void Dequeue() {
 	free(temp);
 }
 
-//anadromiki sunartisi antimetathesis tis ouras
+//recursive function to reverse the queue
 void reverse(citizen *temp) {
 	if (temp == NULL) return;
 
